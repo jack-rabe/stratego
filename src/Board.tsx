@@ -6,5 +6,7 @@ for (let i = 0; i < 100; i++) {
 }
 
 export default function Board() {
-    return <div className="grid grid-cols-10 m-5">{squares}</div>;
+    return (
+        <div className="grid grid-cols-10 w-fit mx-auto my-5">{squares}</div>
+    );
 }

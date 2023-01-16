@@ -2,7 +2,7 @@ export default function Square(props: { position: number }) {
     return (
         <div
             className={
-                'border-l border-t border-black bg-slate-700 text-center hover:bg-slate-500' +
+                'border-l border-t border-black bg-slate-700 text-center hover:bg-slate-500 h-16 w-16 ' +
                 getBorderClasses(props.position)
             }
         >
