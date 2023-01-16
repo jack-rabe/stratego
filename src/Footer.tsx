@@ -1,26 +1,23 @@
 export default function Footer() {
-  return (
-    <footer className="footer p-10 bg-neutral text-neutral-content">
-      <div>
-        <span className="footer-title">Services</span>
-        <a className="link link-hover">Branding</a>
-        <a className="link link-hover">Design</a>
-        <a className="link link-hover">Marketing</a>
-        <a className="link link-hover">Advertisement</a>
-      </div>
-      <div>
-        <span className="footer-title">Company</span>
-        <a className="link link-hover">About us</a>
-        <a className="link link-hover">Contact</a>
-        <a className="link link-hover">Jobs</a>
-        <a className="link link-hover">Press kit</a>
-      </div>
-      <div>
-        <span className="footer-title">Legal</span>
-        <a className="link link-hover">Terms of use</a>
-        <a className="link link-hover">Privacy policy</a>
-        <a className="link link-hover">Cookie policy</a>
-      </div>
-    </footer>
-  );
+    return (
+        <footer className="footer p-10 bg-neutral text-neutral-content">
+            <p className="left-10">Stratego</p>
+            <p className="block right-10 absolute">
+                Made by{' '}
+                <a
+                    href="https://github.com/jack-rabe"
+                    className="link link-hover"
+                >
+                    Jack
+                </a>{' '}
+                and{' '}
+                <a
+                    href="https://github.com/MetalRain682237"
+                    className="link link-hover"
+                >
+                    MetalRain682237
+                </a>
+            </p>
+        </footer>
+    );
 }
