@@ -4,26 +4,32 @@ export default function Square(props: {
     position: number;
     squareSelected: number;
     update: any;
+    troop: string | null;
 }) {
     const [selected, selectSquare] = useState(false);
+    // check if square is adjacent to selected square
+    const isAdjacent = () => {
+        return (
+            (ss + 10 == pos ||
+                ss - 10 == pos ||
+                (Math.abs(pos - ss) == 1 &&
+                    Math.floor(ss / 10) == Math.floor(pos / 10))) &&
+            ss != -1 &&
+            props.troop == null
+        );
+    };
 
     let bgColor = selected ? 'bg-red-700' : 'bg-slate-700';
     const ss = props.squareSelected;
     const pos = props.position;
-    if (
-        (ss + 10 == pos ||
-            ss - 10 == pos ||
-            (Math.abs(pos - ss) == 1 &&
-                Math.floor(ss / 10) == Math.floor(pos / 10))) &&
-        ss != -1
-    )
-        bgColor = 'bg-slate-100';
-    bgColor = ` ${bgColor} hover:${bgColor}`;
+    if (isAdjacent()) bgColor = ' bg-slate-500 hover:bg-blue-600';
+    else bgColor = ` ${bgColor} hover:${bgColor}`;
 
     // handles click to attempt to select this square
     const clickToSelect = () => {
-        // return early if another square is already selected
-        if (props.squareSelected != -1 && !selected) return;
+        // return early if another square is already selected or no troop is on square
+        if ((props.squareSelected != -1 && !selected) || props.troop == null)
+            return;
 
         selectSquare(!selected);
         if (!selected) props.update(props.position);
@@ -40,7 +46,7 @@ export default function Square(props: {
             // select or deselect square when clicked
             onClick={clickToSelect}
         >
-            {props.position}
+            {props.troop ? props.troop : ''}
         </div>
     );
 }
