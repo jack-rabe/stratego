@@ -5,7 +5,7 @@ export default function Header() {
                 <a className="btn btn-ghost normal-case text-xl text-black">
                     Stratego
                 </a>
-                <p id="status"></p>
+                <p className="mx-5" id="status"></p>
             </div>
             <div className="flex-none">
                 <button className="btn btn-square btn-ghost">
