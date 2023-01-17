@@ -2,22 +2,38 @@ import { useState } from 'react';
 
 export default function Square(props: {
     position: number;
-    squareSelected: boolean;
+    squareSelected: number;
     update: any;
 }) {
     const [selected, selectSquare] = useState(false);
 
-    const bgColor = selected ? ' bg-red-700' : ' bg-slate-700';
+    let bgColor = selected ? 'bg-red-700' : 'bg-slate-700';
+    const ss = props.squareSelected;
+    const pos = props.position;
+    if (
+        (ss + 10 == pos ||
+            ss - 10 == pos ||
+            (Math.abs(pos - ss) == 1 &&
+                Math.floor(ss / 10) == Math.floor(pos / 10))) &&
+        ss != -1
+    )
+        bgColor = 'bg-slate-100';
+    bgColor = ` ${bgColor} hover:${bgColor}`;
+
+    // handles click to attempt to select this square
     const clickToSelect = () => {
-        // only allow selection if no other square is clicked already
-        if (props.squareSelected && !selected) return;
+        // return early if another square is already selected
+        if (props.squareSelected != -1 && !selected) return;
+
         selectSquare(!selected);
-        props.update(!selected);
+        if (!selected) props.update(props.position);
+        else props.update(-1);
     };
+
     return (
         <div
             className={
-                'border-l border-t border-black text-center hover:bg-slate-500 h-16 w-16 ' +
+                'border-l border-t border-black text-center h-16 w-16 ' +
                 getBorderClasses(props.position) +
                 bgColor
             }

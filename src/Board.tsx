@@ -2,7 +2,7 @@ import Square from './Square';
 import { useState } from 'react';
 
 export default function Board() {
-    const [squareSelected, updateSelection] = useState(false);
+    const [squareSelected, updateSelection] = useState(-1);
     const squares: JSX.Element[] = [];
     for (let i = 0; i < 100; i++) {
         squares.push(
