@@ -1,12 +1,11 @@
-import { useState } from 'react';
-
 export default function Square(props: {
     position: number;
     squareSelected: number;
     update: any;
+    troops: any;
+    setTroops: any;
     troop: string | null;
 }) {
-    const [selected, selectSquare] = useState(false);
     // check if square is adjacent to selected square
     const isAdjacent = () => {
         return (
@@ -19,21 +18,34 @@ export default function Square(props: {
         );
     };
 
-    let bgColor = selected ? 'bg-red-700' : 'bg-slate-700';
     const ss = props.squareSelected;
     const pos = props.position;
+    let bgColor = ss == pos ? 'bg-red-700' : 'bg-slate-700';
     if (isAdjacent()) bgColor = ' bg-slate-500 hover:bg-blue-600';
     else bgColor = ` ${bgColor} hover:${bgColor}`;
 
     // handles click to attempt to select this square
     const clickToSelect = () => {
+        // return early if square is adjacent
+        if (isAdjacent()) {
+            handleMove();
+            return;
+        }
         // return early if another square is already selected or no troop is on square
-        if ((props.squareSelected != -1 && !selected) || props.troop == null)
+        if ((props.squareSelected != -1 && ss != pos) || props.troop == null)
             return;
 
-        selectSquare(!selected);
-        if (!selected) props.update(props.position);
+        if (ss != pos) props.update(props.position);
         else props.update(-1);
+    };
+    // handles moving to an ajacent square
+    const handleMove = () => {
+        const tmp = props.troops[props.position];
+        props.troops[props.position] = props.troops[props.squareSelected];
+        props.troops[props.squareSelected] = tmp;
+        props.setTroops(props.troops);
+        console.log('hi');
+        props.update(-1);
     };
 
     return (

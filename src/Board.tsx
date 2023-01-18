@@ -1,21 +1,21 @@
 import Square from './Square';
 import { useState } from 'react';
+import troops from './troops.json';
 
 export default function Board() {
     const [squareSelected, updateSelection] = useState(-1);
+    const [boardTroops, setTroops] = useState(troops);
     const squares: JSX.Element[] = [];
-    let troop: 'soldier' | 'archer' | null;
-    for (let i = 0; i < 100; i++) {
-        if (i < 10 || i >= 90) troop = 'archer';
-        else if (i < 20 || i >= 80) troop = 'soldier';
-        else troop = null;
 
+    for (let i = 0; i < 100; i++) {
         squares.push(
             <Square
                 squareSelected={squareSelected}
                 update={updateSelection}
+                troops={troops}
+                setTroops={setTroops}
                 position={i}
-                troop={troop}
+                troop={boardTroops[i]}
             ></Square>
         );
     }
