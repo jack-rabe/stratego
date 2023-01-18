@@ -1,3 +1,5 @@
+const water_tiles = [42, 43, 46, 47, 52, 53, 56, 57];
+
 export default function Square(props: {
     position: number;
     squareSelected: number;
@@ -6,28 +8,20 @@ export default function Square(props: {
     setTroops: any;
     troop: string | null;
 }) {
-    // check if square is adjacent to selected square
-    const isAdjacent = () => {
-        return (
-            (ss + 10 == pos ||
-                ss - 10 == pos ||
-                (Math.abs(pos - ss) == 1 &&
-                    Math.floor(ss / 10) == Math.floor(pos / 10))) &&
-            ss != -1 &&
-            props.troop == null
-        );
-    };
-
     const ss = props.squareSelected;
     const pos = props.position;
+
     let bgColor = ss == pos ? 'bg-red-700' : 'bg-slate-700';
-    if (isAdjacent()) bgColor = ' bg-slate-500 hover:bg-blue-600';
+    if (isAdjacent(pos, ss, props.troop))
+        bgColor = ' bg-slate-500 hover:bg-blue-600';
     else bgColor = ` ${bgColor} hover:${bgColor}`;
+    // water tiles
+    if (water_tiles.includes(pos)) bgColor = ' bg-blue-800';
 
     // handles click to attempt to select this square
     const clickToSelect = () => {
         // return early if square is adjacent
-        if (isAdjacent()) {
+        if (isAdjacent(pos, ss, props.troop)) {
             handleMove();
             return;
         }
@@ -88,4 +82,17 @@ function getBorderClasses(position: number) {
             break;
     }
     return classes.join(' ');
+}
+
+// check if square is adjacent to selected square
+function isAdjacent(pos: number, ss: number, currentTroop: any) {
+    return (
+        (ss + 10 == pos ||
+            ss - 10 == pos ||
+            (Math.abs(pos - ss) == 1 &&
+                Math.floor(ss / 10) == Math.floor(pos / 10))) &&
+        ss != -1 &&
+        currentTroop == null &&
+        !water_tiles.includes(pos)
+    );
 }
