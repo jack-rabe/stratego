@@ -1,3 +1,5 @@
+import EnemyTroop from './EnemyTroop';
+import FriendlyTroop from './FriendlyTroop';
 import { Troop } from './troop';
 
 const ownerId = 2;
@@ -13,11 +15,11 @@ type Props = {
 export default function Square(props: Props) {
     const ss = props.squareSelected;
     const pos = props.position;
+    const isSelected = ss == pos;
     const myTroop = props.troops[pos];
 
     let bgColor: string;
     if (water_tiles.includes(pos)) bgColor = 'bg-blue-800';
-    else if (ss == pos) bgColor = 'bg-red-700';
     else if (isAdjacent(pos, ss, myTroop))
         bgColor = 'bg-slate-500 hover:bg-blue-600';
     else bgColor = 'bg-slate-700';
@@ -50,17 +52,22 @@ export default function Square(props: Props) {
     return (
         <div
             className={
-                'border-l border-t border-black text-center h-16 w-16 ' +
+                'flex border-l border-t border-black text-center h-16 w-16 ' +
                 getBorderClasses(props.position) +
                 ` ${bgColor}`
             }
             // select or deselect square when clicked
             onClick={clickToSelect}
         >
-            {myTroop && myTroop.ownerId == ownerId
-                ? myTroop.representation
-                : ''}
-            {myTroop && myTroop.ownerId != ownerId ? 'xxx' : ''}
+            {myTroop && myTroop.ownerId == ownerId ? (
+                <FriendlyTroop
+                    val={myTroop.representation}
+                    isSelected={isSelected}
+                />
+            ) : (
+                ''
+            )}
+            {myTroop && myTroop.ownerId != ownerId ? <EnemyTroop /> : ''}
         </div>
     );
 }
