@@ -1,5 +1,6 @@
 import { Troop } from './troop';
 
+const ownerId = 2;
 const water_tiles = [42, 43, 46, 47, 52, 53, 56, 57];
 type Props = {
     position: number;
@@ -14,15 +15,17 @@ export default function Square(props: Props) {
     const pos = props.position;
     const myTroop = props.troops[pos];
 
-    let bgColor = ss == pos ? 'bg-red-700' : 'bg-slate-700';
-    if (isAdjacent(pos, ss, myTroop))
-        bgColor = ' bg-slate-500 hover:bg-blue-600';
-    else bgColor = ` ${bgColor} hover:${bgColor}`;
-    // water tiles
-    if (water_tiles.includes(pos)) bgColor = ' bg-blue-800';
+    let bgColor: string;
+    if (water_tiles.includes(pos)) bgColor = 'bg-blue-800';
+    else if (ss == pos) bgColor = 'bg-red-700';
+    else if (isAdjacent(pos, ss, myTroop))
+        bgColor = 'bg-slate-500 hover:bg-blue-600';
+    else bgColor = 'bg-slate-700';
 
     // handles click to attempt to select this square
     const clickToSelect = () => {
+        // return early if the troop is the other player's
+        if (myTroop?.ownerId && myTroop?.ownerId != ownerId) return;
         // return early if square is adjacent
         if (isAdjacent(pos, ss, myTroop)) {
             handleMove();
@@ -49,13 +52,15 @@ export default function Square(props: Props) {
             className={
                 'border-l border-t border-black text-center h-16 w-16 ' +
                 getBorderClasses(props.position) +
-                bgColor
+                ` ${bgColor}`
             }
             // select or deselect square when clicked
             onClick={clickToSelect}
         >
-            {myTroop ? myTroop.representation : ''}
-            {myTroop ? ' ' + myTroop.ownerId : ''}
+            {myTroop && myTroop.ownerId == ownerId
+                ? myTroop.representation
+                : ''}
+            {myTroop && myTroop.ownerId != ownerId ? 'xxx' : ''}
         </div>
     );
 }
@@ -88,7 +93,7 @@ function getBorderClasses(position: number) {
 }
 
 // check if square is adjacent to selected square
-function isAdjacent(pos: number, ss: number, currentTroop: any) {
+function isAdjacent(pos: number, ss: number, currentTroop: Troop | null) {
     return (
         (ss + 10 == pos ||
             ss - 10 == pos ||
