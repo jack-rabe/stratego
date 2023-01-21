@@ -1,6 +1,6 @@
 import Square from './Square';
 import { useState } from 'react';
-import troops from './troops.json';
+import troops from './troops';
 
 export default function Board() {
     const [squareSelected, updateSelection] = useState(-1);
@@ -12,10 +12,10 @@ export default function Board() {
             <Square
                 squareSelected={squareSelected}
                 update={updateSelection}
-                troops={troops}
+                troops={boardTroops}
                 setTroops={setTroops}
                 position={i}
-                troop={boardTroops[i]}
+                key={i}
             ></Square>
         );
     }

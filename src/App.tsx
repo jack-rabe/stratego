@@ -5,9 +5,9 @@ import Board from './Board';
 function App() {
     return (
         <div className="App">
-            <Navbar></Navbar>
-            <Board></Board>
-            <Footer></Footer>
+            <Navbar />
+            <Board />
+            <Footer />
         </div>
     );
 }

@@ -1,18 +1,21 @@
-const water_tiles = [42, 43, 46, 47, 52, 53, 56, 57];
+import { Troop } from './troop';
 
-export default function Square(props: {
+const water_tiles = [42, 43, 46, 47, 52, 53, 56, 57];
+type Props = {
     position: number;
     squareSelected: number;
     update: any;
-    troops: any;
+    troops: (Troop | null)[];
     setTroops: any;
-    troop: string | null;
-}) {
+};
+
+export default function Square(props: Props) {
     const ss = props.squareSelected;
     const pos = props.position;
+    const myTroop = props.troops[pos];
 
     let bgColor = ss == pos ? 'bg-red-700' : 'bg-slate-700';
-    if (isAdjacent(pos, ss, props.troop))
+    if (isAdjacent(pos, ss, myTroop))
         bgColor = ' bg-slate-500 hover:bg-blue-600';
     else bgColor = ` ${bgColor} hover:${bgColor}`;
     // water tiles
@@ -21,12 +24,12 @@ export default function Square(props: {
     // handles click to attempt to select this square
     const clickToSelect = () => {
         // return early if square is adjacent
-        if (isAdjacent(pos, ss, props.troop)) {
+        if (isAdjacent(pos, ss, myTroop)) {
             handleMove();
             return;
         }
         // return early if another square is already selected or no troop is on square
-        if ((props.squareSelected != -1 && ss != pos) || props.troop == null)
+        if ((props.squareSelected != -1 && ss != pos) || myTroop == null)
             return;
 
         if (ss != pos) props.update(props.position);
@@ -38,7 +41,6 @@ export default function Square(props: {
         props.troops[props.position] = props.troops[props.squareSelected];
         props.troops[props.squareSelected] = tmp;
         props.setTroops(props.troops);
-        console.log('hi');
         props.update(-1);
     };
 
@@ -52,7 +54,8 @@ export default function Square(props: {
             // select or deselect square when clicked
             onClick={clickToSelect}
         >
-            {props.troop ? props.troop : ''}
+            {myTroop ? myTroop.representation : ''}
+            {myTroop ? ' ' + myTroop.ownerId : ''}
         </div>
     );
 }
