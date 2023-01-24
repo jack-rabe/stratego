@@ -1,5 +1,6 @@
 export default function FriendlyTroop(props: {
-    val: string;
+    value: number;
+    representation: string;
     isSelected: boolean;
 }) {
     return (
@@ -8,7 +9,8 @@ export default function FriendlyTroop(props: {
                 props.isSelected ? 'bg-primary-focus' : ''
             }`}
         >
-            {props.val}
+            {props.representation + "\n"} 
+            {props.value}
         </div>
     );
 }

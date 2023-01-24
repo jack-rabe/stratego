@@ -16,35 +16,56 @@ export default function Square(props: Props) {
     const ss = props.squareSelected;
     const pos = props.position;
     const isSelected = ss == pos;
-    const myTroop = props.troops[pos];
+    const currentTroop = props.troops[pos];
 
     let bgColor: string;
     if (water_tiles.includes(pos)) bgColor = 'bg-blue-800';
-    else if (isAdjacent(pos, ss, myTroop))
+    else if (isAdjacent(pos, ss, currentTroop))
         bgColor = 'bg-slate-500 hover:bg-blue-600';
     else bgColor = 'bg-slate-700';
 
     // handles click to attempt to select this square
     const clickToSelect = () => {
-        // return early if the troop is the other player's
-        if (myTroop?.ownerId && myTroop?.ownerId != ownerId) return;
+        // return early if no        // return early if the troop is the other player's
+        if (currentTroop?.ownerId && currentTroop?.ownerId != ownerId) {
+            handleAttack();
+            return;
+        }
         // return early if square is adjacent
-        if (isAdjacent(pos, ss, myTroop)) {
+        if (isAdjacent(pos, ss, currentTroop)) {
             handleMove();
             return;
         }
         // return early if another square is already selected or no troop is on square
-        if ((props.squareSelected != -1 && ss != pos) || myTroop == null)
+        if ((props.squareSelected != -1 && ss != pos) || currentTroop == null)
             return;
 
         if (ss != pos) props.update(props.position);
         else props.update(-1);
     };
-    // handles moving to an ajacent square
+    // handles moving to an adjacent square
     const handleMove = () => {
         const tmp = props.troops[props.position];
         props.troops[props.position] = props.troops[props.squareSelected];
         props.troops[props.squareSelected] = tmp;
+        props.setTroops(props.troops);
+        props.update(-1);
+    };
+    // TODO what if they are equal???
+    const handleAttack = () => {
+        const alliedTroop = props.troops[ss];
+        let msg: string;
+        if (currentTroop == null || alliedTroop == null) return;
+
+        if (alliedTroop.value > currentTroop.value) {
+            msg = 'You win!';
+            props.troops[ss] = null;
+            props.troops[props.position] = alliedTroop;
+        } else {
+            msg = 'You lose!';
+            props.troops[ss] = null;
+        }
+        alert(msg);
         props.setTroops(props.troops);
         props.update(-1);
     };
@@ -59,15 +80,20 @@ export default function Square(props: Props) {
             // select or deselect square when clicked
             onClick={clickToSelect}
         >
-            {myTroop && myTroop.ownerId == ownerId ? (
+            {currentTroop && currentTroop.ownerId == ownerId ? (
                 <FriendlyTroop
-                    val={myTroop.representation}
+                    value={currentTroop.value}
+                    representation={currentTroop.representation}
                     isSelected={isSelected}
                 />
             ) : (
                 ''
             )}
-            {myTroop && myTroop.ownerId != ownerId ? <EnemyTroop /> : ''}
+            {currentTroop && currentTroop.ownerId != ownerId ? (
+                <EnemyTroop />
+            ) : (
+                ''
+            )}
         </div>
     );
 }

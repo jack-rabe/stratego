@@ -110,6 +110,10 @@ troopStrings.forEach((str) => {
         return;
     }
     const id = idx < 20 ? 1 : 2;
-    troops.push({ value: 3, ownerId: id, representation: 'archer' });
+    troops.push({
+        value: (idx % 10) + 1,
+        ownerId: id,
+        representation: 'archer',
+    });
 });
 export default troops;
