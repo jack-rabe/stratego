@@ -61,9 +61,13 @@ export default function Square(props: Props) {
             msg = 'You win!';
             props.troops[ss] = null;
             props.troops[props.position] = alliedTroop;
-        } else {
+        } else if (alliedTroop.value < currentTroop.value) {
             msg = 'You lose!';
             props.troops[ss] = null;
+        } else {
+            msg = 'Tie';
+            props.troops[ss] = null;
+            props.troops[props.position] = null;
         }
         alert(msg);
         props.setTroops(props.troops);
@@ -133,7 +137,7 @@ function isAdjacent(pos: number, ss: number, currentTroop: Troop | null) {
             (Math.abs(pos - ss) == 1 &&
                 Math.floor(ss / 10) == Math.floor(pos / 10))) &&
         ss != -1 &&
-        currentTroop == null &&
+        (currentTroop == null || currentTroop.ownerId != ownerId) &&
         !water_tiles.includes(pos)
     );
 }
