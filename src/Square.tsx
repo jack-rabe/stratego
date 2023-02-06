@@ -10,6 +10,7 @@ type Props = {
     update: any;
     troops: (Troop | null)[];
     setTroops: any;
+    switchTurn: any;
 };
 
 export default function Square(props: Props) {
@@ -50,8 +51,8 @@ export default function Square(props: Props) {
         props.troops[props.squareSelected] = tmp;
         props.setTroops(props.troops);
         props.update(-1);
+        props.switchTurn(false);
     };
-    // TODO what if they are equal???
     const handleAttack = () => {
         const alliedTroop = props.troops[ss];
         let msg: string;
@@ -72,6 +73,7 @@ export default function Square(props: Props) {
         alert(msg);
         props.setTroops(props.troops);
         props.update(-1);
+        props.switchTurn();
     };
 
     return (
