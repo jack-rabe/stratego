@@ -7,10 +7,10 @@ const water_tiles = [42, 43, 46, 47, 52, 53, 56, 57];
 type Props = {
     position: number;
     squareSelected: number;
-    update: any;
+    update: React.Dispatch<React.SetStateAction<number>>;
     troops: (Troop | null)[];
-    setTroops: any;
-    switchTurn: any;
+    setTroops: React.Dispatch<React.SetStateAction<(Troop | null)[]>>;
+    switchTurn: () => void;
 };
 
 export default function Square(props: Props) {
@@ -51,7 +51,7 @@ export default function Square(props: Props) {
         props.troops[props.squareSelected] = tmp;
         props.setTroops(props.troops);
         props.update(-1);
-        props.switchTurn(false);
+        props.switchTurn();
     };
     const handleAttack = () => {
         const alliedTroop = props.troops[ss];

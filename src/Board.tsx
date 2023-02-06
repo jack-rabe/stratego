@@ -2,7 +2,12 @@ import Square from './Square';
 import { useState } from 'react';
 import troops from './troops';
 
-export default function Board({ turn, switchTurn }) {
+type Props = {
+    turn: boolean;
+    switchTurn: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export default function Board({ turn, switchTurn }: Props) {
     const [squareSelected, updateSelection] = useState(-1);
     const [boardTroops, setTroops] = useState(troops);
     const squares: JSX.Element[] = [];
